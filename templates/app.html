@@ -10,9 +10,24 @@
 
     <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
   <script>
+    function buscar(){
+        $.get("/buscar"),function(respuesta){
+            $("#tbodyLog").html("")
 
+            respuesta.forEach((renglon) =>{
+                $("#tbodyLog").append(`<tr>
+                <td>${renglon[1]}</td>
+                <td>${renglon[2]}</td>
+                <td>${renglon[3]}</td>
+                </tr>
+                `)
+            })
+        }
+    }    
     // Enable pusher logging - don't include this in production
     Pusher.logToConsole = true;
+
+    buscar()
 
     var pusher = new Pusher('c41e2f5ebe527dbc13ab', {
       cluster: 'us2'
@@ -29,7 +44,7 @@
         </tr>
         `)
         **/
-        
+        buscar()
     });
   </script>
     
