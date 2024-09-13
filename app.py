@@ -12,15 +12,15 @@ def index():
     return render_template("app.html")
 
 @app.route("/evento")
-def evento()
+def evento():
     pusher_client = pusher.Pusher(
-      app_id='1767999',
-      key='c41e2f5ebe527dbc13ab',
-      secret='d98385671bdd57829d94',
-      cluster='us2',
-      ssl=True
+        app_id='1767999',
+        key='c41e2f5ebe527dbc13ab',
+        secret='d98385671bdd57829d94',
+        cluster='us2',
+        ssl=True
     )
-
+    
     pusher_client.trigger('my-channel', 'my-event', {'message': 'hello world'})
     
 
