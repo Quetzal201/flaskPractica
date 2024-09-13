@@ -11,7 +11,7 @@ app = Flask(__name__)
 def index():
     return render_template("app.html")
 
-@app.route("/evento")
+@app.route("/evento",methods=["GET"])
 def evento():
     pusher_client = pusher.Pusher(
         app_id='1767999',
@@ -21,7 +21,7 @@ def evento():
         ssl=True
     )
     
-    pusher_client.trigger('my-channel', 'my-event', {'message': 'hello world'})
+    pusher_client.trigger('my-channel', 'my-event', request.args)
     
 
 @app.route("/alumnos")
