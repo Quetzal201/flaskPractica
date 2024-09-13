@@ -20,7 +20,13 @@
 
     var channel = pusher.subscribe('my-channel');
     channel.bind('my-event', function(data) {
-      alert("Hola");
+      //alert("Hola");
+        $("tbodyLog").append(`<tr>
+        <td>Saca las</td>
+        <td>Guamas</td>
+        <td>Uziel</td>
+        </tr>
+        )
     });
   </script>
     
