@@ -30,9 +30,10 @@ def buscar():
 
     cursor = con.cursor()
     cursor.execute("SELECT * FROM sensor_log")
-    con.close()
     
     registros = cursor.fetchall()
+
+    con.close()
 
     return registros
 
@@ -61,6 +62,8 @@ def evento():
     )
     
     pusher_client.trigger('my-channel', 'my-event', request.args)
+
+    return args
     
 
 @app.route("/alumnos")
@@ -70,9 +73,9 @@ def alumnos():
 
 @app.route("/alumnos/guardar")
 def alumnosGuardar():
-    con.close()
     matricula = request.form["txtMatriculaFA"]
     nombreapellido = request.form["txtNombreApellido"]
+    con.close()
     return f"Matrícula: {matricula} Nombre y Apellido: {nombreapellido}"
 
 # app.run(debug=True, port=8080)
