@@ -23,6 +23,52 @@ def index():
     con.close()
     return render_template("app.html")
 
+
+@app.route("/Formulario",methods=["GET"])
+def renderizarFormulario():
+    con.close()
+    return render_template("formulario.html")
+
+@app.route("/EncuestaExperiencia",methods=["GET"])
+def renderizarEncuesta():
+    con.close()
+    return render_template("encuesta.html")
+
+@app.route("/EventoGET",methods=["POST"])
+def informacionEncuesta():
+    if not con.is_connected():
+        con.reconnect()
+
+    cursor = con.cursor()
+
+    nombre_completo = request.form["NombreCompleto"]
+    comentario = request.form["Comentario"]
+    calificacion = request.form["Calificacion"]
+  
+    sql = "INSERT INTO tst0_experiencias (Nombre_Apellido, Comentario, Calificacion) VALUES (%s, %s, %s)"
+    val = (nombre_completo, comentario, calificacion)
+    cursor.execute(sql, val)
+    
+    con.commit()
+    con.close()
+      
+    pusher_client = pusher.Pusher(
+        app_id='1767999',
+        key='c41e2f5ebe527dbc13ab',
+        secret='d98385671bdd57829d94',
+        cluster='us2',
+        ssl=True
+    )
+    
+    pusher_client.trigger('my-channel', 'my-event', {'NombreCompleto': nombre_completo, 'Comentario': comentario, 'Calificacion': calificacion})
+
+    return render_template("formulario.html")
+
+@app.route("/instrucciones")
+def instrucciones():
+    con.close()
+    return render_template("instrucciones.html")
+
 @app.route("/buscar")
 def buscar():
     if not con.is_connected():
@@ -33,6 +79,19 @@ def buscar():
     
     registros = cursor.fetchall()
 
+    con.close()
+
+    return registros
+
+@app.route("/buscarComentarios")
+def buscarComentarios():
+    if not con.is_connected():
+        con.reconnect()
+
+    cursor = con.cursor()
+    cursor.execute("SELECT * FROM tst0_experiencias")
+    
+    registros = cursor.fetchall()
     con.close()
 
     return registros
@@ -61,7 +120,7 @@ def evento():
         ssl=True
     )
     
-    pusher_client.trigger('my-channel', 'my-event', request.args)
+    pusher_client.trigger('my-channel', 'my-event', {request.args})
 
     return args
     
