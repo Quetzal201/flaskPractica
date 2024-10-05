@@ -96,6 +96,69 @@ def buscarComentarios():
 
     return registros
 
+@app.route("/EncuestaExperiencia/eliminar", methods=["GET"])
+def eliminarRegistro():
+    if not con.is_connected():
+        con.reconnect()
+
+    cursor = con.cursor()
+
+    args = request.args
+
+    sql = "DELETE FROM tst0_experiencias WHERE Id_Experiencia = %s"
+    val = (args["idEliminar"],)  
+
+    cursor.execute(sql, val)
+    con.commit()
+
+    con.close()
+
+    return render_template("encuesta.html")
+
+@app.route("/EncuestaExperiencia/modificar", methods=["GET"])
+def modificarRegistro():
+
+    args = request.args
+
+    if "AccionModificar" in args and "idModificar" in args:
+        if not con.is_connected():
+            con.reconnect()
+
+            cursor = con.cursor()
+            args = request.args
+
+            sql = "UPDATE tst0_experiencias SET Nombre_Apellido = %s, Comentario = %s, Calificacion = %s WHERE Id_Experiencia = %s"
+            val = (args["NombreCompleto"],args["Comentario"],args["Calificacion"],args["idModificar"]) 
+
+            cursor.execute(sql, val)
+            con.commit()
+            con.close()
+            return render_template("formulario2.html");
+    else :
+        return render_template("formulario2.html");
+
+
+@app.route("/EncuestaExperiencia/BuscarRegistroModificar", methods=["GET"])
+def buscarRegistro():
+    if not con.is_connected():
+        con.reconnect()
+
+    cursor = con.cursor()
+
+    args = request.args
+
+    sql = "SELECT * FROM tst0_experiencias WHERE Id_Experiencia = %s"
+    val = (args["idModificar"],) 
+
+    cursor.execute(sql, val)
+
+    registros = cursor.fetchall()
+
+    con.close()
+
+    return registros
+
+
 @app.route("/evento",methods=["GET"])
 def evento():
     if not con.is_connected():
@@ -136,5 +199,3 @@ def alumnosGuardar():
     nombreapellido = request.form["txtNombreApellido"]
     con.close()
     return f"Matrícula: {matricula} Nombre y Apellido: {nombreapellido}"
-
-# app.run(debug=True, port=8080)
