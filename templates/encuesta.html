@@ -42,6 +42,8 @@
                     <th>Persona</th>
                     <th>Comentario</th>
                     <th>Calificación</th>
+                    <th>Modificar</th>
+                    <th>Eliminar</th>
                 </tr>
             </thead>
             <tbody id="tbodyLog"></tbody>
@@ -56,14 +58,27 @@
 
             respuesta.forEach((renglon) =>{
                 $("#tbodyLog").append(`<tr>
+                <input type="hidden" value="${renglon[0]}">
                 <td>${renglon[1]}</td>
                 <td>${renglon[2]}</td>
                 <td>${renglon[3]}</td>
+                <td><input type="button" value="Modificar" onclick="modificar(${renglon[0]})"></td>
+                <td><input type="button" value="Eliminar" onclick="eliminar(${renglon[0]})"></td>
                 </tr>
                 `)
             })
         })
     }
+
+    function modificar(id){
+        window.location.href=`/EncuestaExperiencia/modificar?idModificar=${id}`
+    }
+
+    function eliminar(id){
+        window.location.href=`/EncuestaExperiencia/eliminar?idEliminar=${id}`
+    }
+
+
     
     // Enable pusher logging - don't include this in production
     Pusher.logToConsole = true;
