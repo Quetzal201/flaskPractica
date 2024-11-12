@@ -89,7 +89,7 @@ def buscarComentarios():
         con.reconnect()
 
     cursor = con.cursor()
-    cursor.execute("SELECT * FROM tst0_experiencias")
+    cursor.execute("SELECT * FROM tst0_experiencias ORDER BY Id_Experiencia DESC")
     
     registros = cursor.fetchall()
     con.close()
